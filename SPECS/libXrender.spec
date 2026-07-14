@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXrender runtime library
 Name: libXrender
 Version: 0.9.10
-Release: 16%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 16%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}.1
 License: MIT
 URL: http://www.x.org
 
@@ -16,6 +16,10 @@ Source2:    commitid
 %else
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
 %endif
+
+# https://redhat.atlassian.net/browse/RHEL-191382
+# https://gitlab.freedesktop.org/xorg/lib/libxrender/-/merge_requests/14
+Patch0:   0001-Ensure-all-BufAlloc-calls-have-trailing-semicolon.patch
 
 Requires: libX11 >= 1.5.99.902
 
@@ -37,6 +41,7 @@ X.Org X11 libXrender development package
 
 %prep
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%patch 0 -p1
 
 %build
 autoreconf -v --install --force
@@ -68,6 +73,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xrender.pc
 
 %changelog
+* Mon Jun 29 2026 Olivier Fourdan <ofourdan@redhat.com> - 0.9.10-16.1
+- Fix build with newer libX11
+  Resolves: https://redhat.atlassian.net/browse/RHEL-191382
+
 * Mon Aug 09 2021 Mohan Boddu <mboddu@redhat.com> - 0.9.10-16
 - Rebuilt for IMA sigs, glibc 2.34, aarch64 flags
   Related: rhbz#1991688
