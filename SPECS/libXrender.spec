@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXrender runtime library
 Name: libXrender
 Version: 0.9.10
-Release: 7%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 8%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -19,6 +19,9 @@ Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.t
 %endif
 
 Requires: libX11 >= 1.5.99.902
+
+# https://gitlab.freedesktop.org/xorg/lib/libxrender/-/commit/0564bce5446550c1b1681f3d8a933c20ea1455f7
+Patch0: libXrender-0.9.10-CVE-2026-88807.patch
 
 BuildRequires: xorg-x11-util-macros
 BuildRequires: autoconf automake libtool
@@ -38,6 +41,7 @@ X.Org X11 libXrender development package
 
 %prep
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%patch -P 0 -p1
 
 %build
 autoreconf -v --install --force
@@ -69,6 +73,10 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xrender.pc
 
 %changelog
+* Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 0.9.10-8
+- CVE-2026-88807 libXrender: libXrender: Code injection via heap overflow in RenderQueryPictFormats
+  in RenderQueryPictFormats
+
 * Thu Jul 05 2018 Adam Jackson <ajax@redhat.com> - 0.9.10-7
 - Drop useless %%defattr
 
