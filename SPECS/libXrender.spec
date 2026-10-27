@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXrender runtime library
 Name: libXrender
 Version: 0.9.11
-Release: 8%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 8%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}.1
 License: HPND-sell-variant
 URL: http://www.x.org
 
@@ -16,6 +16,9 @@ Source2:    commitid
 %else
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
 %endif
+
+# https://gitlab.freedesktop.org/xorg/lib/libxrender/-/commit/0564bce5446550c1b1681f3d8a933c20ea1455f7
+Patch0: libXrender-0.9.11-CVE-2026-88807.patch
 
 Requires: libX11 >= 1.5.99.902
 
@@ -37,6 +40,7 @@ X.Org X11 libXrender development package
 
 %prep
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
+%patch -P 0 -p1
 
 %build
 autoreconf -v --install --force
@@ -68,6 +72,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xrender.pc
 
 %changelog
+* Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 0.9.11-8.1
+- CVE-2026-88807 libXrender: libXrender: Code injection via heap overflow in RenderQueryPictFormats
+  overflow in RenderQueryPictFormats
+  Resolves: RHEL-267112
+
 * Tue Oct 29 2024 Troy Dawson <tdawson@redhat.com> - 0.9.11-8
 - Bump release for October 2024 mass rebuild:
   Resolves: RHEL-64018
