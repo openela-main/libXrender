@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXrender runtime library
 Name: libXrender
 Version: 0.9.10
-Release: 16%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}.1
+Release: 16%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}.2
 License: MIT
 URL: http://www.x.org
 
@@ -20,6 +20,10 @@ Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.t
 # https://redhat.atlassian.net/browse/RHEL-191382
 # https://gitlab.freedesktop.org/xorg/lib/libxrender/-/merge_requests/14
 Patch0:   0001-Ensure-all-BufAlloc-calls-have-trailing-semicolon.patch
+
+# https://redhat.atlassian.net/browse/RHEL-267120
+# https://gitlab.freedesktop.org/xorg/lib/libxrender/-/commit/0564bce5446550c1b1681f3d8a933c20ea1455f7
+Patch1:   libXrender-0.9.10-CVE-2026-88807.patch
 
 Requires: libX11 >= 1.5.99.902
 
@@ -42,6 +46,7 @@ X.Org X11 libXrender development package
 %prep
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 %patch 0 -p1
+%patch 1 -p1
 
 %build
 autoreconf -v --install --force
@@ -73,6 +78,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xrender.pc
 
 %changelog
+* Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 0.9.10-16.2
+- CVE-2026-88807 libXrender: libXrender: Code injection via heap overflow in RenderQueryPictFormats
+  in RenderQueryPictFormats
+  Resolves: https://redhat.atlassian.net/browse/RHEL-267120
+
 * Mon Jun 29 2026 Olivier Fourdan <ofourdan@redhat.com> - 0.9.10-16.1
 - Fix build with newer libX11
   Resolves: https://redhat.atlassian.net/browse/RHEL-191382
