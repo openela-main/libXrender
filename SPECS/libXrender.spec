@@ -74,8 +74,8 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %changelog
 * Thu Oct 22 2026 RHEL Packaging Agent <redhat-ymir-agent@redhat.com> - 0.9.11-8.1
 - CVE-2026-88807 libXrender: libXrender: Code injection via heap overflow in RenderQueryPictFormats
-  overflow in RenderQueryPictFormats
-  Resolves: RHEL-267112
+  in RenderQueryPictFormats
+  Resolves: RHEL-267108
 
 * Tue Oct 29 2024 Troy Dawson <tdawson@redhat.com> - 0.9.11-8
 - Bump release for October 2024 mass rebuild:
